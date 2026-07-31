@@ -24,7 +24,7 @@ async function handleSignup(){
         username,
         password
     })
-    console.log(res);
+
     setSuccess( res.data);
  } catch (error) {
     console.error(error);
