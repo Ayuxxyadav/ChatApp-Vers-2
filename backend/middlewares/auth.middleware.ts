@@ -1,31 +1,31 @@
-import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-
-const JWT_SECRET = process.env.JWT_SECRET;
-
+import { Request, Response, NextFunction } from "express";
 
 
 
-export const Middleware= (req: Request, res: Response, next: NextFunction) => {
+interface JwtPayload {
+  userId: string;
+}
 
-  const Token = req.headers["authorization"];
-  
+export function middleware(req: Request,res: Response,next: NextFunction) {
+  const token = req.headers.authorization;
 
-  if (!Token) {
-    return res.status(401).json({ success: false, message: "Access token required" });
+  if (!token) {
+    return res.status(401).json({
+      message: "Unauthorized"
+    });
   }
-
+    
   try {
-    const decoded = jwt.verify(Token,JWT_SECRET as string) 
-    if ( !decoded){
-        return res.status(400).json({
-            message : "Invalid jwt " 
-        })
-    }
-    //@ts-ignore
-    req.user = decoded;
+    
+    const decoded = jwt.verify(token,process.env.JWT_SECRET as string) as JwtPayload;
+
+    req.userId = decoded.userId;
+
     next();
-  } catch (err) {
-    return res.status(403).json({ success: false, message: "Invalid or expired token" });
+  } catch (error) {
+    return res.status(403).json({
+      message: "Invalid token"
+    });
   }
-};
+}
