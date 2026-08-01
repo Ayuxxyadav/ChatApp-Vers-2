@@ -3,11 +3,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { RefreshCw, Users, ArrowRight, Sparkles } from 'lucide-react';
 
+// Backend JSON ke according interface update kiya
 interface Room {
-  id?: string;
-  roomId?: string;
-  roomName?: string;
-  createdAt?: string;
+  id: string;
+  adminId: string;
+  slug: string;
+  createdAt: string;
 }
 
 const FetchAllRoom = () => {
@@ -23,15 +24,14 @@ const FetchAllRoom = () => {
     try {
       const token = localStorage.getItem('token');
 
-      // GET request for fetching all rooms
       const response = await axios.get('http://localhost:12000/api/v1/all-room', {
         headers: {
-          Authorization: token || '', // Direct token as required
+          Authorization: token || '',
         },
       });
 
-      // Handling response format (Array vs Object wrap)
-      const data = response.data.rooms || response.data.data || response.data;
+      // API response: { allRooms: [...], message: "..." }
+      const data = response.data.allRooms;
       if (Array.isArray(data)) {
         setRooms(data);
       } else {
@@ -49,6 +49,7 @@ const FetchAllRoom = () => {
     fetchRooms();
   }, []);
 
+  // Sirf tabhi navigate hoga jab user manually "Join" button click karega
   const handleJoinRoom = (roomId: string) => {
     if (!roomId) return;
     navigate(`/room/${roomId}`);
@@ -102,8 +103,9 @@ const FetchAllRoom = () => {
       {!loading && !error && rooms.length > 0 && (
         <div className="grid grid-cols-1 gap-3 max-h-[380px] overflow-y-auto pr-1 custom-scrollbar">
           {rooms.map((room) => {
-            const id = room.roomId || room._id || room.id || '';
-            const name = room.roomName || room.name || 'Untitled Room';
+            const id = room.id;
+            const name = room.slug; // Name backend ke 'slug' se mil raha hai
+            const formattedDate = new Date(room.createdAt).toLocaleDateString();
 
             return (
               <div
@@ -111,12 +113,17 @@ const FetchAllRoom = () => {
                 className="bg-slate-950/80 border border-slate-800/80 hover:border-purple-500/50 p-4 rounded-2xl flex items-center justify-between transition group"
               >
                 <div className="overflow-hidden pr-2">
-                  <h3 className="font-semibold text-sm text-slate-200 group-hover:text-purple-300 transition truncate">
+                  <h3 className="font-semibold text-sm text-slate-200 group-hover:text-purple-300 transition truncate capitalize">
                     {name}
                   </h3>
-                  <p className="text-[11px] text-slate-500 font-mono mt-0.5">
-                    ID: {id}
-                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-[10px] text-slate-500 font-mono bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                      ID: {id.slice(0, 8)}...
+                    </span>
+                    <span className="text-[10px] text-slate-500">
+                      {formattedDate}
+                    </span>
+                  </div>
                 </div>
 
                 <button
