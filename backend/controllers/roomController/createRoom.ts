@@ -28,6 +28,7 @@ export const createRoomController = async (req:Request , res:Response)=>{
     res.status(200).json({
     roomId: roomDb.id,
     roomName: roomDb.slug,
+    createdAt : roomDb.createdAt,
     message: "created room successfully"
      })
    } catch (error) {
