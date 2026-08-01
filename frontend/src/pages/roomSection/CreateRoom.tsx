@@ -4,36 +4,33 @@ import { useNavigate } from 'react-router-dom';
 import { Sparkles, ArrowLeft } from 'lucide-react';
 
 const CreateRoom = () => {
+
   const navigate = useNavigate();
 
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isDuplicate, setIsDuplicate] = useState(false);
 
   async function handleCreateRoom(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError('');
     setSuccess('');
 
-    // Field validation check
     if (!name.trim()) {
       setError('Room name is required!');
       return;
     }
-
     setLoading(true);
 
     try {
       const token = localStorage.getItem('token');
-
       if (!token) {
         setError('You are not logged in! Please sign in first.');
         setTimeout(() => navigate('/auth/signin'), 1500);
         return;
       }
-
-      // API Call with exact key 'name' and direct token header
       const response = await axios.post(
         'http://localhost:12000/api/v1/create-room',
         {
@@ -49,29 +46,28 @@ const CreateRoom = () => {
       setSuccess('Room created successfully! Redirecting...');
       setName('');
 
-      // Backend response se roomId extract kar navigation
-      const createdRoomId = response.data.roomId || response.data.id;
+      const createdRoomId = response.data.roomId ;
 
-      setTimeout(() => {
-        if (createdRoomId) {
-          navigate(`/room/${createdRoomId}`);
-        } else {
-          navigate('/room');
-        }
-      }, 1200);
+    }  catch (err:any) {
+  console.error('Error creating room:', err);
+  const status = err.response?.status;
+  const message = err.response?.data?.message || 'Error occurred while creating room.';
 
-    } catch (err: any) {
-      console.error('Error creating room:', err);
-      setError(err.response?.data?.message || 'Error occurred while creating room.');
-    } finally {
-      setLoading(false);
-    }
+  if (status === 409 || message.toLowerCase().includes('unique')) {
+    setError('This room name is already taken. Try something else!');
+    setIsDuplicate(true); 
+  } else {
+    setError(message);
   }
+} finally {
+  setLoading(false);
+} 
+}
 
   return (
     <div className="w-full bg-slate-900/60 border border-slate-800 p-8 rounded-3xl backdrop-blur-xl shadow-2xl">
       
-      {/* Top Badge */}
+    
       <div className="flex items-center gap-2 mb-2 text-purple-400">
         <Sparkles size={18} />
         <span className="text-xs uppercase tracking-widest font-bold">Start Conversation</span>
@@ -88,27 +84,32 @@ const CreateRoom = () => {
           <label htmlFor="roomName" className="block text-sm font-medium text-slate-300 mb-2">
             Room Name
           </label>
-          <input
-            id="roomName"
-            type="text"
-            placeholder="e.g. Late Night Gossip, Gaming Squad..."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3.5 bg-slate-950 border border-slate-800 rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 transition text-sm"
-          />
+              <input
+                id="roomName"
+                type="text"
+                placeholder="e.g. Late Night Gossip, Gaming Squad..."
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setIsDuplicate(false); // user type kare toh error clear
+                  setError('');
+                }}
+                className={`w-full px-4 py-3.5 bg-slate-950 border rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none transition text-sm ${
+                  isDuplicate ? 'border-red-500 focus:border-red-500' : 'border-slate-800 focus:border-purple-500'
+                }`}
+              />
         </div>
 
-        {/* Error Message Banner */}
         {error && (
           <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-medium">
             ⚠️ {error}
           </div>
         )}
 
-        {/* Success Message Banner */}
+      
         {success && (
           <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-3 rounded-xl text-xs font-medium text-center">
-            ✅ {success}
+          {success}
           </div>
         )}
 
@@ -131,5 +132,6 @@ const CreateRoom = () => {
     </div>
   );
 };
+
 
 export default CreateRoom;

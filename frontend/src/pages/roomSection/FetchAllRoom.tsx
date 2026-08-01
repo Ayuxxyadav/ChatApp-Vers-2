@@ -26,7 +26,7 @@ const FetchAllRoom = () => {
 
       const response = await axios.get('http://localhost:12000/api/v1/all-room', {
         headers: {
-          Authorization: token || '',
+          Authorization: token ,
         },
       });
 

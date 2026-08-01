@@ -32,7 +32,7 @@ export const createRoomController = async (req:Request , res:Response)=>{
     message: "created room successfully"
      })
    } catch (error) {
-       res.status(403).json({
+       res.status(409).json({
       message: "Romm name should be unique"
    })
    }
