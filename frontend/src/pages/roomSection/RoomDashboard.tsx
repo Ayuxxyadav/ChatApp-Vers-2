@@ -2,6 +2,7 @@ import React from 'react';
 
 import FetchAllRoom from './FetchAllRoom';
 import CreateRoom from './CreateRoom';
+import JoinRoom from './JoinRoom';
 
 
 const RoomDashboard = () => {
@@ -14,7 +15,7 @@ const RoomDashboard = () => {
 
         {/* Right Side: All Active Rooms List */}
         <FetchAllRoom />
-
+       <JoinRoom/>
       </div>
     </div>
   );

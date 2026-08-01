@@ -118,7 +118,7 @@ const FetchAllRoom = () => {
                   </h3>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-[10px] text-slate-500 font-mono bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
-                      ID: {id.slice(0, 8)}...
+                      ID: {id}
                     </span>
                     <span className="text-[10px] text-slate-500">
                       {formattedDate}
