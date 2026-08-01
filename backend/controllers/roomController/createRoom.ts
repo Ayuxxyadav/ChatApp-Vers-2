@@ -8,7 +8,7 @@ export const createRoomController = async (req:Request , res:Response)=>{
     const inputValidion = createRoomSchema.safeParse(req.body);
     if (!inputValidion.success) {
         return res.status(400).json({
-            message:" inputValidion while createing Room "
+            message:" inputValidion while creating Room "
         })
     }
     
