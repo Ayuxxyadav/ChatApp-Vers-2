@@ -1,9 +1,12 @@
+
 import React from 'react'
 
-const CreateRoom = () => {
+export const CreateRoom = () => {
+
+
+
+  
   return (
     <div>CreateRoom</div>
   )
 }
-
-export default CreateRoom
