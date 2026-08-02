@@ -10,8 +10,7 @@ import {
   Copy, 
   Check, 
   Lock, 
-  MessageSquare,
-  Sparkles 
+
 } from 'lucide-react';
 
 const ChatRoom = () => {

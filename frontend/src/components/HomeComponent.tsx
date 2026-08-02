@@ -83,7 +83,7 @@ export const HomePage = () => {
             
             <div className="flex items-center justify-center gap-2 text-xs text-slate-500 font-medium px-2">
               <Lock size={14} className="text-emerald-400" />
-              <span>No signup required to explore</span>
+              <span>signup required to explore</span>
             </div>
           </div>
 
