@@ -43,23 +43,23 @@ export function startWebSocketServer() {
     const count = membersCount.get(roomId) || 0 ;
     
     if ( count === 0 ){
-     await sub.subscribe(`room:${roomId}`)
-    }else{
-      membersCount.set(roomId, count+1);
+     await sub.subscribe(`roomId:${roomId}`)
     }
+      membersCount.set(roomId, count+1);
+    
   }
    async function unsubscribeToRoom(roomId:string) {
     const count = membersCount.get(roomId) || 0
     if ( count <= 1){
       membersCount.delete(roomId);
-      await sub.unsubscribe(`room:${roomId}`)
+      await sub.unsubscribe(`roomId:${roomId}`)
     }else{
        membersCount.set(roomId,count-1);
     }
    }
 
 
-   sub.on("message", (message)=>{
+   sub.on("message", (channel, message)=>{
     const data = JSON.parse(message);
     users.forEach(user => {
       if(user.rooms.includes(data.roomId)){
@@ -106,7 +106,7 @@ export function startWebSocketServer() {
       }
 
       if ( parsedData.type =="leave_room"){
-        let parsedData : any ;
+        
         try {
           const roomId = String(parsedData.roomId );
           const user = users.find(x=>x.ws == ws);
@@ -137,7 +137,7 @@ export function startWebSocketServer() {
           console.log("error occurs while saving the chats in db");
           return ;
         }
-        await pub.publish(`roomId${roomId}`,JSON.stringify({
+        await pub.publish(`roomId:${roomId}`,JSON.stringify({
           type : "chat",
           message : parsedData.message,
           roomId
