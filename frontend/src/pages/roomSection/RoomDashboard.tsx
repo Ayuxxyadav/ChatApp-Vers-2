@@ -15,11 +15,9 @@ const RoomDashboard = () => {
         {/* Header */}
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
           <div>
-            <div className="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-widest mb-1">
-               Chugli.v2
-            </div>
+           
             <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-              Chugli Dashboard
+              Dashboard
             </h1>
           </div>
           
