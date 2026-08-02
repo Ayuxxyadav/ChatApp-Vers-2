@@ -25,29 +25,26 @@ const JoinRoom = () => {
       return;
     }
 
-    // Direct navigate to chat room (useSocket hook automatically handles WebSocket connection & join_room event)
     navigate(`/room/${trimmedId}`);
   };
 
   return (
-    <div className="w-full bg-slate-900/60 border border-slate-800 p-8 rounded-3xl backdrop-blur-xl shadow-2xl">
-      
-      {/* Badge */}
-      <div className="flex items-center gap-2 mb-2 text-pink-400">
-        <LogIn size={18} />
-        <span className="text-xs uppercase tracking-widest font-bold">Existing Room</span>
+    <div className="relative group overflow-hidden bg-slate-900/40 backdrop-blur-2xl border border-slate-800/80 hover:border-pink-500/30 p-6 md:p-8 rounded-3xl transition-all duration-300 shadow-2xl shadow-pink-950/10">
+      {/* Background Glow */}
+      <div className="absolute -top-24 -right-24 w-48 h-48 bg-pink-600/10 rounded-full blur-3xl pointer-events-none group-hover:bg-pink-600/20 transition-all duration-500" />
+
+      <div className="flex items-center gap-2 mb-3 text-pink-400">
+        <span className="p-2 bg-pink-500/10 rounded-xl border border-pink-500/20">
+          <LogIn size={16} />
+        </span>
+        <span className="text-xs uppercase tracking-wider font-bold">Join Room</span>
       </div>
 
-      <h2 className="text-2xl font-bold text-slate-100 mb-1">Join a Room</h2>
-      <p className="text-slate-400 text-sm mb-6">
-        Enter the Room ID shared by your friend to jump straight into the conversation.
-      </p>
 
-      {/* Form */}
-      <form onSubmit={handleJoinRoom} className="space-y-5">
+      <form onSubmit={handleJoinRoom} className="space-y-4">
         <div>
-          <label htmlFor="roomId" className="block text-sm font-medium text-slate-300 mb-2">
-            Room ID
+          <label htmlFor="roomId" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+            Enter room ID
           </label>
           <input
             id="roomId"
@@ -58,27 +55,25 @@ const JoinRoom = () => {
               setRoomIdInput(e.target.value);
               if (error) setError('');
             }}
-            className="w-full px-4 py-3.5 bg-slate-950 border border-slate-800 rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-pink-500 transition text-sm font-mono"
+            className="w-full px-4 py-3.5 bg-slate-950/80 border border-slate-800 rounded-2xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-pink-500/80 focus:ring-2 focus:ring-pink-500/20 transition-all text-xs font-mono tracking-wide"
           />
         </div>
 
-        {/* Error Banner */}
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-medium">
-            ⚠️ {error}
+          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-xs font-medium flex items-center gap-2 animate-in fade-in duration-200">
+            <span>⚠️</span> {error}
           </div>
         )}
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={!roomIdInput.trim()}
-          className="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:opacity-90 text-white font-bold py-3.5 px-6 rounded-2xl transition shadow-lg shadow-pink-600/25 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-semibold py-3.5 px-6 rounded-2xl transition-all duration-200 shadow-lg shadow-pink-600/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
         >
-          Join Room <ArrowRight size={18} />
+          <span>Connect to Room</span>
+          <ArrowRight size={16} />
         </button>
       </form>
-
     </div>
   );
 };

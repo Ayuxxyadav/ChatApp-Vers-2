@@ -21,7 +21,7 @@ export const useSocket = (roomId: string) => {
     socketRef.current = ws;
 
     ws.onopen = () => {
-      console.log('✅ Connected to WebSocket Server');
+      console.log('Connected to WebSocket Server');
       setIsConnected(true);
 
       // 2. Connection open hote hi "join_room" event bhejo
@@ -51,7 +51,7 @@ export const useSocket = (roomId: string) => {
     };
 
     ws.onclose = () => {
-      console.log('❌ Disconnected from WebSocket');
+      console.log('Disconnected from WebSocket');
       setIsConnected(false);
 
       // Cleanup: Leave room event send karne ki koshish agar socket active hai
