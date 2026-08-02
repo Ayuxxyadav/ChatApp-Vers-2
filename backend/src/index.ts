@@ -1,7 +1,7 @@
 import express from "express";
 import router from "../routes/userRoutes";
 import dotenv from "dotenv"
-import { startWsServer } from "./socket";
+import { startWebSocketServer } from "./socket";
 import cors from "cors";
 
 dotenv.config() ;
@@ -25,4 +25,4 @@ app.listen(PORT, () => {
 });
 
 
-startWsServer();
+startWebSocketServer();
