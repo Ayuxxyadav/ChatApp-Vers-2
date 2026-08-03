@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 interface ChatMessage {
   type: string;
   roomId: string;
+  isSelf?: boolean; // Add this line
   message: string;
   userId?: string;
 }
